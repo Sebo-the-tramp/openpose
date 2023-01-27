@@ -61,7 +61,7 @@ namespace op
         try
         {
             // Debugging log
-            opLogIfDebug("", Priority::Low, __LINE__, __FUNCTION__, __FILE__);
+            opLogIfDebug("Evvai", Priority::Low, __LINE__, __FUNCTION__, __FILE__);
             // Profiling speed
             const auto profilerKey = Profiler::timerInit(__LINE__, __FUNCTION__, __FILE__);
             // Create and fill final shared pointer

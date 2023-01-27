@@ -182,7 +182,7 @@ namespace op
     {
         try
         {
-            opLog("", Priority::Low, __LINE__, __FUNCTION__, __FILE__);
+            opLog("asd", Priority::Low, __LINE__, __FUNCTION__, __FILE__);
             // Set threads
             multisetToThreads();
             if (!mThreads.empty())

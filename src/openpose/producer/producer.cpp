@@ -6,6 +6,9 @@
 #include <openpose/utilities/openCv.hpp>
 #include <openpose_private/utilities/openCvMultiversionHeaders.hpp>
 
+
+// test evvaisssiadasidsadsadasd
+
 namespace op
 {
     void reset(unsigned int& numberEmptyFrames, bool& trackingFps)
@@ -39,7 +42,7 @@ namespace op
             mProperties[(unsigned int)ProducerProperty::NumberViews] = numberViews;
             auto& mNumberViews = mProperties[(unsigned int)ProducerProperty::NumberViews];
             // Camera (distortion, intrinsic, and extrinsic) parameters
-            if (mType != ProducerType::FlirCamera)
+            if (mType != ProducerType::FlirCamera && mType != ProducerType::NdiCamera)
             {
                 // Undistort image?
                 mCameraParameterReader.setUndistortImage(undistortImage);
@@ -324,7 +327,7 @@ namespace op
                 // closed keeping the 0-index frame counting
                 if (mNumberEmptyFrames > 2
                     || (mType != ProducerType::FlirCamera && mType != ProducerType::IPCamera
-                        && mType != ProducerType::Webcam
+                        && mType != ProducerType::Webcam && mType != ProducerType::NdiCamera
                         && get(CV_CAP_PROP_POS_FRAMES) >= get(CV_CAP_PROP_FRAME_COUNT)))
                 {
                     // Repeat video
@@ -427,6 +430,12 @@ namespace op
             // IP camera
             else if (producerType == ProducerType::IPCamera)
                 return std::make_shared<IpCameraReader>(producerString, cameraParameterPath, undistortImage);
+
+            // NDI camera - added by Sebastian
+            else if (producerType == ProducerType::NdiCamera)
+                return std::make_shared<NdiReader>(
+                    cameraParameterPath, cameraResolution, undistortImage, std::stoi(producerString));
+                
             // Flir camera
             else if (producerType == ProducerType::FlirCamera)
                 return std::make_shared<FlirReader>(

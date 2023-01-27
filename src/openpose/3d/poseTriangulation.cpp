@@ -140,6 +140,8 @@ namespace op
                             atLeastOnePointProjected = true;
                         }
                     }
+                    opLog("Reprojecting error: "
+                        + std::to_string(reprojectionErrorTotal), Priority::High);
                     // Warning
                     if (reprojectionErrorTotal > 60)
                         opLog("Unusual high re-projection error (averaged over #keypoints) of value "

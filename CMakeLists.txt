@@ -279,6 +279,9 @@ option(WITH_3D_RENDERER "Add OpenPose 3D renderer module (it requires FreeGLUT l
 if (UNIX AND NOT APPLE)
   option(WITH_CERES "Add Ceres support for advanced 3-D reconstruction." OFF)
 endif (UNIX AND NOT APPLE)
+
+option(WITH_NDI_CAMERA "Add NDI camera code (requires NDI SDK already installed)." ON)
+
 option(WITH_FLIR_CAMERA "Add FLIR (formerly Point Grey) camera code (requires Spinnaker SDK already installed)." OFF)
 # option(WITH_3D_ADAM_MODEL "Add 3-D Adam model (requires OpenGL, Ceres, Eigen, OpenMP, FreeImage, GLEW, and IGL already installed)." OFF)
 
@@ -365,6 +368,13 @@ endif (WITH_3D_RENDERER)
 if (WITH_CERES)
   add_definitions(-DUSE_CERES)
 endif (WITH_CERES)
+
+# added by Sebastian
+if (WITH_NDI_CAMERA)
+  # OpenPose flags
+  add_definitions(-DUSE_NDI_CAMERA)
+endif (WITH_NDI_CAMERA)
+
 if (WITH_FLIR_CAMERA)
   # OpenPose flags
   add_definitions(-DUSE_FLIR_CAMERA)
@@ -453,6 +463,17 @@ if (UNIX OR APPLE)
     # Eigen + Ceres
     find_package(Ceres REQUIRED COMPONENTS SuiteSparse)
   endif (WITH_CERES)
+
+  # added by Sebastian
+  if (WITH_NDI_CAMERA)
+    # NDI
+    find_package(NDI)
+    if (NOT NDI_FOUND)
+      message(FATAL_ERROR "NDI SDK not found. Either turn off the `WITH_NDI_CAMERA` option or specify the path to
+        the NDI includes and libs.")
+    endif (NOT NDI_FOUND)
+  endif (WITH_NDI_CAMERA)
+
   if (WITH_FLIR_CAMERA)
     # Spinnaker
     find_package(Spinnaker)
@@ -460,7 +481,8 @@ if (UNIX OR APPLE)
       message(FATAL_ERROR "Spinnaker not found. Either turn off the `WITH_FLIR_CAMERA` option or specify the path to
         the Spinnaker includes and libs.")
     endif (NOT SPINNAKER_FOUND)
-  endif (WITH_FLIR_CAMERA)
+  endif (WITH_FLIR_CAMERA)  
+
   if (WITH_3D_ADAM_MODEL)
     if (NOT WITH_3D_RENDERER)
       message(FATAL_ERROR "WITH_3D_RENDERER is required if WITH_3D_ADAM_MODEL is enabled.")
@@ -621,6 +643,12 @@ if (WIN32)
     find_library(GLUT_LIBRARY freeglut HINTS ${FIND_LIB_PREFIX}/freeglut/lib)
     message(STATUS "\${GLUT_LIBRARY} = ${GLUT_LIBRARY}")
   endif (WITH_3D_RENDERER)
+
+  # added by Sebastian
+  if (WITH_NDI_CAMERA)
+    find_library(NDI_LIB Processing.NDI.Lib.x64 HINTS "C:/Program Files/NDI/NDI 5 SDK/Lib/x64")
+  endif (WITH_NDI_CAMERA)
+
   if (WITH_FLIR_CAMERA)
     find_library(SPINNAKER_LIB spinnaker_v140 HINTS ${FIND_LIB_PREFIX}/spinnaker/lib)
   endif (WITH_FLIR_CAMERA)
@@ -646,6 +674,12 @@ if (WIN32)
   if (WITH_3D_RENDERER)
     set(GLUT_INCLUDE_DIRS "3rdparty/windows/freeglut/include")
   endif (WITH_3D_RENDERER)
+
+  # added by Sebastian
+  if (WITH_NDI_CAMERA)
+    set(NDI_INCLUDE_DIRS "C:/Program Files/NDI/NDI 5 SDK/Include")
+  endif (WITH_NDI_CAMERA)
+
   if (WITH_FLIR_CAMERA)
     set(SPINNAKER_INCLUDE_DIRS "3rdparty/windows/spinnaker/include")
   endif (WITH_FLIR_CAMERA)
@@ -684,6 +718,13 @@ if (WIN32)
       file(GLOB GLUT_DLL "${CMAKE_SOURCE_DIR}/3rdparty/windows/freeglut/bin/*.dll")
       file(COPY ${GLUT_DLL} DESTINATION ${BIN_FOLDER})
     endif (WITH_3D_RENDERER OR WITH_3D_ADAM_MODEL)
+
+    # NDI DLLs and other files - added by Sebastian
+    if (WITH_NDI_CAMERA)
+      file(GLOB NDI_DLL "C:/Program Files/NDI/NDI 5 SDK/Bin/x64/*")
+      file(COPY ${NDI_DLL} DESTINATION ${BIN_FOLDER})
+    endif (WITH_NDI_CAMERA)
+
     # Spinnaker DLLs and other files
     if (WITH_FLIR_CAMERA)
       file(GLOB SPINNAKER_DLL "${CMAKE_SOURCE_DIR}/3rdparty/windows/spinnaker/bin/*")
@@ -889,6 +930,12 @@ endif (WITH_3D_RENDERER)
 if (WITH_CERES)
   include_directories(${CERES_INCLUDE_DIRS})
 endif (WITH_CERES)
+
+# added by Sebastian
+if (WITH_NDI_CAMERA)
+  include_directories(${NDI_INCLUDE_DIRS})
+endif (WITH_NDI_CAMERA)
+
 if (WITH_FLIR_CAMERA)
   include_directories(SYSTEM ${SPINNAKER_INCLUDE_DIRS}) # To remove its warnings, equiv. to -isystem
 endif (WITH_FLIR_CAMERA)
@@ -956,6 +1003,12 @@ endif (WITH_3D_RENDERER)
 if (WITH_CERES)
   set(OpenPose_3rdparty_libraries ${OpenPose_3rdparty_libraries} ${CERES_LIBRARIES})
 endif (WITH_CERES)
+
+# added by Sebastian
+if (WITH_NDI_CAMERA)
+  set(OpenPose_3rdparty_libraries ${OpenPose_3rdparty_libraries} ${NDI_LIB})
+endif (WITH_NDI_CAMERA)
+
 if (WITH_FLIR_CAMERA)
   set(OpenPose_3rdparty_libraries ${OpenPose_3rdparty_libraries} ${SPINNAKER_LIB})
 endif (WITH_FLIR_CAMERA)

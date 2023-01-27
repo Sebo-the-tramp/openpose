@@ -23,11 +23,12 @@ namespace op
     // Determine type of frame source
     OP_API ProducerType flagsToProducerType(
         const String& imageDirectory, const String& videoPath, const String& ipCameraPath,
-        const int webcamIndex, const bool flirCamera);
+        const int webcamIndex, const bool flirCamera, const bool ndiCamera);
 
     OP_API std::pair<ProducerType, String> flagsToProducer(
         const String& imageDirectory, const String& videoPath, const String& ipCameraPath = String(""),
-        const int webcamIndex = -1, const bool flirCamera = false, const int flirCameraIndex = -1);
+        const int webcamIndex = -1, const bool flirCamera = false, const int flirCameraIndex = -1, 
+        const bool ndiCamera = false, const int ndiCameraIndex = -1);
 
     OP_API std::vector<HeatMapType> flagsToHeatMaps(
         const bool heatMapsAddParts = false, const bool heatMapsAddBkg = false,

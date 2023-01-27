@@ -13,7 +13,7 @@
 
 // Custom OpenPose flags
 // Producer
-DEFINE_string(image_dir,                "examples/media/",
+DEFINE_string(image_dir,                "examples/media/Cam1",
     "Process a directory of images. Read all standard formats (jpg, png, bmp, etc.).");
 
 // This worker will just read and return all the basic image file formats in a directory

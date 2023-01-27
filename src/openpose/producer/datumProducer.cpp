@@ -23,7 +23,10 @@ namespace op
             // Set frame first and step
             if (producerSharedPtr->getType() != ProducerType::FlirCamera
                 && producerSharedPtr->getType() != ProducerType::IPCamera
-                && producerSharedPtr->getType() != ProducerType::Webcam)
+                && producerSharedPtr->getType() != ProducerType::Webcam
+                
+                /*addad by Sebastian*/
+                && producerSharedPtr->getType() != ProducerType::NdiCamera)
             {
                 // Frame first
                 producerSharedPtr->set(CV_CAP_PROP_POS_FRAMES, (double)frameFirst);

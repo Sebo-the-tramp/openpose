@@ -163,7 +163,7 @@ namespace op
 
     ProducerType flagsToProducerType(
         const String& imageDirectory, const String& videoPath, const String& ipCameraPath,
-        const int webcamIndex, const bool flirCamera)
+        const int webcamIndex, const bool flirCamera, const bool ndiCamera)
     {
         try
         {
@@ -191,6 +191,9 @@ namespace op
                 return ProducerType::IPCamera;
             else if (flirCamera)
                 return ProducerType::FlirCamera;
+            //added by Sebastian
+            else if (ndiCamera)
+                return ProducerType::NdiCamera;
             else
                 return ProducerType::Webcam;
         }
@@ -203,13 +206,13 @@ namespace op
 
     std::pair<ProducerType, String> flagsToProducer(
         const String& imageDirectory, const String& videoPath, const String& ipCameraPath,
-        const int webcamIndex, const bool flirCamera, const int flirCameraIndex)
+		const int webcamIndex, const bool flirCamera, const int flirCameraIndex, const bool ndiCamera, const int ndiCameraIndex)
     {
         try
         {
-            opLog("", Priority::Low, __LINE__, __FUNCTION__, __FILE__);
+            opLog("Selecting producer Type", Priority::Low, __LINE__, __FUNCTION__, __FILE__);
             const auto type = flagsToProducerType(
-                imageDirectory, videoPath, ipCameraPath, webcamIndex, flirCamera);
+                imageDirectory, videoPath, ipCameraPath, webcamIndex, flirCamera, ndiCamera);
 
             if (type == ProducerType::ImageDirectory)
                 return std::make_pair(ProducerType::ImageDirectory, imageDirectory);
@@ -220,6 +223,9 @@ namespace op
             // Flir camera
             else if (type == ProducerType::FlirCamera)
                 return std::make_pair(ProducerType::FlirCamera, String(std::to_string(flirCameraIndex)));
+            // NDI camera - added by Sebastian
+            else if (type == ProducerType::NdiCamera)
+                return std::make_pair(ProducerType::NdiCamera, String(std::to_string(ndiCameraIndex)));
             // Webcam
             else if (type == ProducerType::Webcam)
                 return std::make_pair(ProducerType::Webcam, String(std::to_string(webcamIndex)));
