@@ -63,8 +63,25 @@ namespace op
                 const auto profilerKey = Profiler::timerInit(__LINE__, __FUNCTION__, __FILE__);
                 // Save body/face/hand keypoints to JSON file
                 const auto& tDatumFirstPtr = (*tDatums)[0];
-                const auto baseFileName = (!tDatumFirstPtr->name.empty() ? tDatumFirstPtr->name
-                                            : std::to_string(tDatumFirstPtr->id)) + "_keypoints";
+
+
+                // MODIFY
+                // get current timestamp
+				auto now = std::chrono::system_clock::now();
+				auto now_ms = std::chrono::time_point_cast<std::chrono::milliseconds>(now);
+				auto value = now_ms.time_since_epoch();
+
+                // to string
+				std::stringstream ss;
+				ss << value.count();
+				std::string timestamp = ss.str();                
+                
+                const auto t = timestamp + "_keypoints";
+
+                opLogIfDebug("" + t, Priority::High, __LINE__, __FUNCTION__, __FILE__);
+
+                const auto baseFileName = (!tDatumFirstPtr->name.empty() ? tDatumFirstPtr->name : std::to_string(tDatumFirstPtr->id)) + "_keypoints";
+                    
                 const bool humanReadable = false;
                 for (auto i = 0u ; i < tDatums->size() ; i++)
                 {

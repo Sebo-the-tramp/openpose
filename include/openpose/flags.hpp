@@ -16,7 +16,7 @@
 // Note: This command will show you flags for other unnecessary 3rdparty files. Check only the flags for the OpenPose
 // executable. E.g., for `openpose.bin`, look for `Flags from examples/openpose/openpose.cpp:`.
 // Debugging/Other
-DEFINE_int32(logging_level,             3,              "The logging level. Integer in the range [0, 255]. 0 will output any opLog() message,"
+DEFINE_int32(logging_level,             1,              "The logging level. Integer in the range [0, 255]. 0 will output any opLog() message,"
                                                         " while 255 will not output any. Current OpenPose library messages are in the range 0-4:"
                                                         " 1 for low priority messages and 4 for important ones.");
 DEFINE_bool(disable_multi_thread,       false,          "It would slightly reduce the frame rate in order to highly reduce the lag. Mainly useful"
@@ -28,14 +28,14 @@ DEFINE_int32(profile_speed,             1000,           "If PROFILER_ENABLED was
 #ifndef OPENPOSE_FLAGS_DISABLE_POSE
 #ifndef OPENPOSE_FLAGS_DISABLE_PRODUCER
 // Producer
-DEFINE_int32(camera,                    1,             "The camera index for cv::VideoCapture. Integer in the range [0, 9]. Select a negative"
+DEFINE_int32(camera,                    -1,             "The camera index for cv::VideoCapture. Integer in the range [0, 9]. Select a negative"
                                                         " number (by default), to auto-detect and open the first available camera.");
 DEFINE_string(camera_resolution,        "-1x-1",        "Set the camera resolution (either `--camera` or `--flir_camera`). `-1x-1` will use the"
                                                         " default 1280x720 for `--camera`, or the maximum flir camera resolution available for"
                                                         " `--flir_camera`");
 DEFINE_string(video,                    "",             "Use a video file instead of the camera. Use `examples/media/video.avi` for our default"
                                                            " example video.");
-DEFINE_string(image_dir,                "",             "Process a directory of images. Use `examples/media/` for our default example folder with 20"
+DEFINE_string(image_dir,                "C:\\Users\\Sebastian Cavada\\Documents\\SCSV\\Thesis\\_images\\Synthetic\\Animation_medium_distortion\\All\\",             "Process a directory of images. Use `examples/media/` for our default example folder with 20"
                                                         " images. Read all standard formats (jpg, png, bmp, etc.).");
 DEFINE_bool(flir_camera,                false,          "Whether to use FLIR (Point-Grey) stereo camera.");
 DEFINE_int32(flir_camera_index,         -1,             "Select -1 (default) to run on all detected flir cameras at once. Otherwise, select the flir"
@@ -43,7 +43,7 @@ DEFINE_int32(flir_camera_index,         -1,             "Select -1 (default) to 
                                                         " serial number, and `n` to the `n`-th lowest serial number camera.");
 DEFINE_string(ip_camera,                "",             "String with the IP camera URL. It supports protocols like RTSP and HTTP.");
 
-DEFINE_bool(ndi_camera,                true,           "Whether to use NDI camera inputs.");
+DEFINE_bool(ndi_camera,                false,           "Whether to use NDI camera inputs.");
 DEFINE_int32(ndi_camera_index,         -1,             "Select -1 (default) to run on all detected flir cameras at once. Otherwise, select the flir"
                                                         " camera index to run, where 0 corresponds to the detected flir camera with the lowest"
                                                         " serial number, and `n` to the `n`-th lowest serial number camera.");
@@ -58,10 +58,10 @@ DEFINE_int32(frame_rotate,              0,              "Rotate each frame, 4 po
 DEFINE_bool(frames_repeat,              false,          "Repeat frames when finished.");
 DEFINE_bool(process_real_time,          false,          "Enable to keep the original source frame rate (e.g., for video). If the processing time is"
                                                         " too long, it will skip frames. If it is too fast, it will slow it down.");
-DEFINE_string(camera_parameter_path,    "models/cameraParameters/ndi/", "String with the folder where the camera parameters are located. If there"
+DEFINE_string(camera_parameter_path,    "models/cameraParameters/folder/", "String with the folder where the camera parameters are located. If there"
                                                         " is only 1 XML file (for single video, webcam, or images from the same camera), you must"
                                                         " specify the whole XML file path (ending in .xml).");
-DEFINE_bool(frame_undistort,            true,          "If false (default), it will not undistort the image, if true, it will undistortionate them"
+DEFINE_bool(frame_undistort,            false,          "If false (default), it will not undistort the image, if true, it will undistortionate them"
                                                         " based on the camera parameters found in `camera_parameter_path`");
 #endif // OPENPOSE_FLAGS_DISABLE_PRODUCER
 // OpenPose
@@ -91,7 +91,7 @@ DEFINE_int32(number_people_max,         1,              "This parameter will lim
                                                         " highly occluded people. -1 will keep them all.");
 DEFINE_bool(maximize_positives,         false,          "It reduces the thresholds to accept a person candidate. It highly increases both false and"
                                                         " true positives. I.e., it maximizes average recall but could harm average precision.");
-DEFINE_double(fps_max,                  -1.,            "Maximum processing frame rate. By default (-1), OpenPose will process frames as fast as"
+DEFINE_double(fps_max,                  1.,            "Maximum processing frame rate. By default (-1), OpenPose will process frames as fast as"
                                                         " possible. Example usage: If OpenPose is displaying images too quickly, this can reduce"
                                                         " the speed so the user can analyze better each frame from the GUI.");
 // OpenPose Body Pose
@@ -176,7 +176,7 @@ DEFINE_bool(3d,                         true,          "Running OpenPose 3-D rec
 DEFINE_int32(3d_min_views,              -1,             "Minimum number of views required to reconstruct each keypoint. By default (-1), it will"
                                                         " require max(2, min(4, #cameras-1)) cameras to see the keypoint in order to reconstruct"
                                                         " it.");
-DEFINE_int32(3d_views,                  -1,             "Complementary option for `--image_dir` or `--video`. OpenPose will read as many images per"
+DEFINE_int32(3d_views,                  1,             "Complementary option for `--image_dir` or `--video`. OpenPose will read as many images per"
                                                         " iteration, allowing tasks such as stereo camera processing (`--3d`). Note that"
                                                         " `--camera_parameter_path` must be set. OpenPose must find as many `xml` files in the"
                                                         " parameter folder as this number indicates.");
@@ -203,7 +203,7 @@ DEFINE_double(render_threshold,         0.05,           "Only estimated keypoint
                                                         " the saved results. Generally, a high threshold (> 0.5) will only render very clear body"
                                                         " parts; while small thresholds (~0.1) will also output guessed and occluded keypoints,"
                                                         " but also more false positives (i.e., wrong detections).");
-DEFINE_int32(render_pose,               2,             "Set to 0 for no rendering, 1 for CPU rendering (slightly faster), and 2 for GPU rendering"
+DEFINE_int32(render_pose,               0,             "Set to 0 for no rendering, 1 for CPU rendering (slightly faster), and 2 for GPU rendering"
                                                         " (slower but greater functionality, e.g., `alpha_X` flags). If -1, it will pick CPU if"
                                                         " CPU_ONLY is enabled, or GPU if CUDA is enabled. If rendering is enabled, it will render"
                                                         " both `outputData` and `cvOutputData` with the original image and desired body part to be"
@@ -229,7 +229,7 @@ DEFINE_double(hand_alpha_heatmap,       0.7,            "Analogous to `alpha_hea
 DEFINE_bool(fullscreen,                 false,          "Run in full-screen mode (press f during runtime to toggle).");
 DEFINE_bool(no_gui_verbose,             false,          "Do not write text on output images on GUI (e.g., number of current frame and people). It"
                                                         " does not affect the pose rendering.");
-DEFINE_int32(display,                   -1,             "Display mode: -1 for automatic selection; 0 for no display (useful if there is no X server"
+DEFINE_int32(display,                   0,             "Display mode: -1 for automatic selection; 0 for no display (useful if there is no X server"
                                                         " and/or to slightly speed up the processing if visual output is not required); 2 for 2-D"
                                                         " display; 3 for 3-D display (if `--3d` enabled); and 1 for both 2-D and 3-D display.");
 #endif // OPENPOSE_FLAGS_DISABLE_DISPLAY
@@ -258,7 +258,7 @@ DEFINE_bool(write_video_with_audio,     false,          "If the input is video a
                                                         " details).");
 DEFINE_string(write_video_3d,           "",             "Analogous to `--write_video`, but applied to the 3D output.");
 DEFINE_string(write_video_adam,         "",             "Experimental, not available yet. Analogous to `--write_video`, but applied to Adam model.");
-DEFINE_string(write_json,               "C:\\Users\\Sebastian Cavada\\Documents\\SCSV\\Thesis\\_data\\Stream\\3dpose", "Directory to write OpenPose output in JSON format. It includes body, hand, and face pose"
+DEFINE_string(write_json,               "C:\\Users\\Sebastian Cavada\\Documents\\SCSV\\Thesis\\_data\\Stream\\test_sync_2", "Directory to write OpenPose output in JSON format. It includes body, hand, and face pose"
                                                         " keypoints (2-D and 3-D), as well as pose candidates (if `--part_candidates` enabled).");
 DEFINE_string(write_coco_json,          "",             "Full file path to write people pose data with JSON COCO validation format. If foot, face,"
                                                         " hands, etc. JSON is also desired (`--write_coco_json_variants`), they are saved with"
