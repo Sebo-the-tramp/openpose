@@ -435,7 +435,12 @@ namespace op
             else if (producerType == ProducerType::NdiCamera)
                 return std::make_shared<NdiReader>(
                     cameraParameterPath, cameraResolution, undistortImage, std::stoi(producerString));
-                
+
+            // BASLER camera - added by Sebastian
+            else if (producerType == ProducerType::BaslerCamera)
+                return std::make_shared<BaslerReader>(
+                    cameraParameterPath, cameraResolution, undistortImage, std::stoi(producerString));    
+            
             // Flir camera
             else if (producerType == ProducerType::FlirCamera)
                 return std::make_shared<FlirReader>(

@@ -280,7 +280,9 @@ if (UNIX AND NOT APPLE)
   option(WITH_CERES "Add Ceres support for advanced 3-D reconstruction." OFF)
 endif (UNIX AND NOT APPLE)
 
-option(WITH_NDI_CAMERA "Add NDI camera code (requires NDI SDK already installed)." ON)
+option(WITH_NDI_CAMERA "Add NDI camera code (requires NDI SDK already installed)." OFF)
+
+option(WITH_BASLER_CAMERA "Add BASLER camera code (requires Pylon SDK already installed)." ON)
 
 option(WITH_FLIR_CAMERA "Add FLIR (formerly Point Grey) camera code (requires Spinnaker SDK already installed)." OFF)
 # option(WITH_3D_ADAM_MODEL "Add 3-D Adam model (requires OpenGL, Ceres, Eigen, OpenMP, FreeImage, GLEW, and IGL already installed)." OFF)
@@ -374,6 +376,12 @@ if (WITH_NDI_CAMERA)
   # OpenPose flags
   add_definitions(-DUSE_NDI_CAMERA)
 endif (WITH_NDI_CAMERA)
+
+# added by Sebastian
+if (WITH_BASLER_CAMERA)
+  # OpenPose flags
+  add_definitions(-DUSE_BASLER_CAMERA)
+endif (WITH_BASLER_CAMERA)
 
 if (WITH_FLIR_CAMERA)
   # OpenPose flags
@@ -473,6 +481,17 @@ if (UNIX OR APPLE)
         the NDI includes and libs.")
     endif (NOT NDI_FOUND)
   endif (WITH_NDI_CAMERA)
+
+  # added by Sebastian
+  if (WITH_BASLER_CAMERA)
+    # PYLON
+    find_package(PYLON)
+    if (NOT PYLON_FOUND)
+      message(FATAL_ERROR "Pylon SDK not found. Either turn off the `WITH_BASLER_CAMERA` option or specify the path to
+        the PYLON includes and libs.")
+    endif (NOT PYLON_FOUND)
+  endif (WITH_BASLER_CAMERA)
+
 
   if (WITH_FLIR_CAMERA)
     # Spinnaker
@@ -649,6 +668,19 @@ if (WIN32)
     find_library(NDI_LIB Processing.NDI.Lib.x64 HINTS "C:/Program Files/NDI/NDI 5 SDK/Lib/x64")
   endif (WITH_NDI_CAMERA)
 
+  # TODO
+
+  # added by Sebastian
+  if (WITH_BASLER_CAMERA)
+    find_library(BASLER_LIB GCBase_MD_VC141_v3_1_Basler_pylon  HINTS "C:\\Program Files\\Basler\\pylon 7\\Development\\lib\\x64")
+    find_library(BASLER_LIB1 GenApi_MD_VC141_v3_1_Basler_pylon HINTS "C:\\Program Files\\Basler\\pylon 7\\Development\\lib\\x64")
+    find_library(BASLER_LIB2 PylonBase_v7_2 HINTS "C:\\Program Files\\Basler\\pylon 7\\Development\\lib\\x64")
+    find_library(BASLER_LIB3 PylonC HINTS "C:\\Program Files\\Basler\\pylon 7\\Development\\lib\\x64")
+    find_library(BASLER_LIB4 PylonDataProcessing_v1_1 HINTS "C:\\Program Files\\Basler\\pylon 7\\Development\\lib\\x64")
+    find_library(BASLER_LIB5 PylonGUI_v7_2  HINTS "C:\\Program Files\\Basler\\pylon 7\\Development\\lib\\x64")
+    find_library(BASLER_LIB6 PylonUtility_v7_2  HINTS "C:\\Program Files\\Basler\\pylon 7\\Development\\lib\\x64")
+  endif (WITH_BASLER_CAMERA)
+
   if (WITH_FLIR_CAMERA)
     find_library(SPINNAKER_LIB spinnaker_v140 HINTS ${FIND_LIB_PREFIX}/spinnaker/lib)
   endif (WITH_FLIR_CAMERA)
@@ -679,6 +711,11 @@ if (WIN32)
   if (WITH_NDI_CAMERA)
     set(NDI_INCLUDE_DIRS "C:/Program Files/NDI/NDI 5 SDK/Include")
   endif (WITH_NDI_CAMERA)
+
+  # added by Sebastian
+  if (WITH_BASLER_CAMERA)
+    set(BASLER_INCLUDE_DIRS "C:/Program Files/Basler/pylon 7/Development/include")
+  endif (WITH_BASLER_CAMERA)
 
   if (WITH_FLIR_CAMERA)
     set(SPINNAKER_INCLUDE_DIRS "3rdparty/windows/spinnaker/include")
@@ -724,6 +761,12 @@ if (WIN32)
       file(GLOB NDI_DLL "C:/Program Files/NDI/NDI 5 SDK/Bin/x64/*")
       file(COPY ${NDI_DLL} DESTINATION ${BIN_FOLDER})
     endif (WITH_NDI_CAMERA)
+
+    # PYLON DLLs and other files - added by Sebastian
+    if (WITH_BASLER_CAMERA)
+      file(GLOB PYLON_DLL "C:/Program Files/Basler/pylon 7/Runtime/x64/*")
+      file(COPY ${PYLON_DLL} DESTINATION ${BIN_FOLDER})
+    endif (WITH_BASLER_CAMERA)
 
     # Spinnaker DLLs and other files
     if (WITH_FLIR_CAMERA)
@@ -936,6 +979,11 @@ if (WITH_NDI_CAMERA)
   include_directories(${NDI_INCLUDE_DIRS})
 endif (WITH_NDI_CAMERA)
 
+# added by Sebastian
+if (WITH_BASLER_CAMERA)
+  include_directories(${BASLER_INCLUDE_DIRS})
+endif (WITH_BASLER_CAMERA)
+
 if (WITH_FLIR_CAMERA)
   include_directories(SYSTEM ${SPINNAKER_INCLUDE_DIRS}) # To remove its warnings, equiv. to -isystem
 endif (WITH_FLIR_CAMERA)
@@ -1008,6 +1056,19 @@ endif (WITH_CERES)
 if (WITH_NDI_CAMERA)
   set(OpenPose_3rdparty_libraries ${OpenPose_3rdparty_libraries} ${NDI_LIB})
 endif (WITH_NDI_CAMERA)
+
+# added by Sebastian
+if (WITH_BASLER_CAMERA)
+  set(OpenPose_3rdparty_libraries ${OpenPose_3rdparty_libraries} ${BASLER_LIB})
+  set(OpenPose_3rdparty_libraries ${OpenPose_3rdparty_libraries} ${BASLER_LIB1})
+  set(OpenPose_3rdparty_libraries ${OpenPose_3rdparty_libraries} ${BASLER_LIB2})
+  set(OpenPose_3rdparty_libraries ${OpenPose_3rdparty_libraries} ${BASLER_LIB3})
+  set(OpenPose_3rdparty_libraries ${OpenPose_3rdparty_libraries} ${BASLER_LIB4})
+  set(OpenPose_3rdparty_libraries ${OpenPose_3rdparty_libraries} ${BASLER_LIB5})
+  set(OpenPose_3rdparty_libraries ${OpenPose_3rdparty_libraries} ${BASLER_LIB6})
+  set(OpenPose_3rdparty_libraries ${OpenPose_3rdparty_libraries} ${BASLER_LIB7})
+endif (WITH_BASLER_CAMERA)
+
 
 if (WITH_FLIR_CAMERA)
   set(OpenPose_3rdparty_libraries ${OpenPose_3rdparty_libraries} ${SPINNAKER_LIB})

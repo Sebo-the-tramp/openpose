@@ -80,13 +80,13 @@ namespace op
 
                 opLogIfDebug("" + t, Priority::High, __LINE__, __FUNCTION__, __FILE__);
 
-                const auto baseFileName = (!tDatumFirstPtr->name.empty() ? tDatumFirstPtr->name : std::to_string(tDatumFirstPtr->id)) + "_keypoints";
+                //const auto baseFileName = (!tDatumFirstPtr->name.empty() ? tDatumFirstPtr->name : std::to_string(tDatumFirstPtr->id)) + "_keypoints";
+                const auto baseFileName = timestamp + "_keypoints";                
                     
                 const bool humanReadable = false;
                 for (auto i = 0u ; i < tDatums->size() ; i++)
                 {
-                    const auto& tDatumPtr = (*tDatums)[i];
-                    // const auto fileName = baseFileName;
+                    const auto& tDatumPtr = (*tDatums)[i];                    
                     const auto fileName = baseFileName + (i != 0 ? "_" + std::to_string(i) : "");
 
                     // Pose IDs from long long to float

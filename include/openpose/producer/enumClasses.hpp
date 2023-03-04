@@ -43,7 +43,7 @@ namespace op
         /** A NDI camera frame extractor, extending the functionality of cv::VideoCapture. --> Unreal Implementation. Based on NDI SDK*/
         NdiCamera,
         /** A Pylon camera frame extractor, extending the functionality of cv::VideoCapture. --> Real Implementation. Based on Pylon SDK*/
-        PylonCamera,
+        BaslerCamera,
         /** No type defined. Default state when no specific Producer has been picked yet. */
         None,
     };

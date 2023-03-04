@@ -32,7 +32,7 @@ void configureWrapper(op::Wrapper& opWrapper)
         op::String producerString;
         std::tie(producerType, producerString) = op::flagsToProducer(
             op::String(FLAGS_image_dir), op::String(FLAGS_video), op::String(FLAGS_ip_camera), FLAGS_camera,
-			FLAGS_flir_camera, FLAGS_flir_camera_index, FLAGS_ndi_camera, FLAGS_ndi_camera_index);
+			FLAGS_flir_camera, FLAGS_flir_camera_index, FLAGS_ndi_camera, FLAGS_ndi_camera_index, FLAGS_basler_camera, FLAGS_basler_camera_index);
         // cameraSize
         const auto cameraSize = op::flagsToPoint(op::String(FLAGS_camera_resolution), "-1x-1");
         // outputSize
