@@ -43,11 +43,11 @@ DEFINE_int32(flir_camera_index,         -1,             "Select -1 (default) to 
                                                         " serial number, and `n` to the `n`-th lowest serial number camera.");
 DEFINE_string(ip_camera,                "",             "String with the IP camera URL. It supports protocols like RTSP and HTTP.");
 
-DEFINE_bool(ndi_camera,                false,           "Whether to use NDI camera inputs.");
+DEFINE_bool(ndi_camera,                true,           "Whether to use NDI camera inputs.");
 DEFINE_int32(ndi_camera_index,         -1,             "Select -1 (default) to run on all detected flir cameras at once. Otherwise, select the flir"
                                                         " camera index to run, where 0 corresponds to the detected flir camera with the lowest"
                                                         " serial number, and `n` to the `n`-th lowest serial number camera.");
-DEFINE_bool(basler_camera,              true,        "Whether to use BASLER camera inputs.");
+DEFINE_bool(basler_camera,              false,        "Whether to use BASLER camera inputs.");
 DEFINE_int32(basler_camera_index,       -1,           "Select -1 (default) to run on all detected flir cameras at once. Otherwise, select the flir"
                                                         " camera index to run, where 0 corresponds to the detected flir camera with the lowest"
                                                         " serial number, and `n` to the `n`-th lowest serial number camera.");
@@ -61,7 +61,7 @@ DEFINE_int32(frame_rotate,              0,              "Rotate each frame, 4 po
 DEFINE_bool(frames_repeat,              false,          "Repeat frames when finished.");
 DEFINE_bool(process_real_time,          false,          "Enable to keep the original source frame rate (e.g., for video). If the processing time is"
                                                         " too long, it will skip frames. If it is too fast, it will slow it down.");
-DEFINE_string(camera_parameter_path,    "models/cameraParameters/basler/", "String with the folder where the camera parameters are located. If there"
+DEFINE_string(camera_parameter_path,    "models/cameraParameters/ndi/", "String with the folder where the camera parameters are located. If there"
                                                         " is only 1 XML file (for single video, webcam, or images from the same camera), you must"
                                                         " specify the whole XML file path (ending in .xml).");
 DEFINE_bool(frame_undistort,            true,          "If false (default), it will not undistort the image, if true, it will undistortionate them"
