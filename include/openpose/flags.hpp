@@ -261,7 +261,7 @@ DEFINE_bool(write_video_with_audio,     false,          "If the input is video a
                                                         " details).");
 DEFINE_string(write_video_3d,           "",             "Analogous to `--write_video`, but applied to the 3D output.");
 DEFINE_string(write_video_adam,         "",             "Experimental, not available yet. Analogous to `--write_video`, but applied to Adam model.");
-DEFINE_string(write_json,               "C:\\Users\\Sebastian Cavada\\Documents\\SCSV\\Thesis\\data\\_keypoints\\Stream\\test_sync_2", "Directory to write OpenPose output in JSON format. It includes body, hand, and face pose"
+DEFINE_string(write_json,               "", "Directory to write OpenPose output in JSON format. It includes body, hand, and face pose"
                                                         " keypoints (2-D and 3-D), as well as pose candidates (if `--part_candidates` enabled).");
 DEFINE_string(write_coco_json,          "",             "Full file path to write people pose data with JSON COCO validation format. If foot, face,"
                                                         " hands, etc. JSON is also desired (`--write_coco_json_variants`), they are saved with"
